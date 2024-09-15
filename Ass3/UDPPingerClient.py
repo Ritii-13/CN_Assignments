@@ -24,7 +24,7 @@ class UDPPingerClient:
             try:
                 self.clientSocket.sendto(message.encode(), (self.serverName, self.serverPort))
                 start_time = time.time()
-                response, serverAddress = self.clientSocket.recvfrom(4096)
+                response, serverAddress = self.clientSocket.recvfrom(1024)
                 end_time = time.time()
 
                 rtt = self.calculateRTT(end_time, start_time)

@@ -12,7 +12,6 @@ while True:
     message, clientAddress = serverSocket.recvfrom(1024)  
     
     if rand < 4:
-        
         continue
 
     decoded_message = message.decode()

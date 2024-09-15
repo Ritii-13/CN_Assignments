@@ -30,7 +30,7 @@ class UDPPingerClient:
                 rtt = self.calculateRTT(end_time, start_time)
                 self.RTTs.append(rtt)
 
-                print(f"Reply from {self.serverName}, address: {serverAddress}: {response.decode()}")
+                print(f"Reply from {self.serverName}: {response.decode()}")
                 print(f"RTT: {rtt:.6f} seconds")
 
             except timeout:

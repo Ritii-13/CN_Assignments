@@ -2,10 +2,10 @@ import time
 from socket import *
 
 class UDPPingerClient:
-    tot_packets = 1000  
+    tot_packets = 100  
     missed_heartbeats = 0  
     consecutive_misses = 0  
-    total_sent=0
+    total_sent = 0
 
 
     def __init__ (self, serverName, serverPort):
@@ -17,7 +17,7 @@ class UDPPingerClient:
     def ping(self, tot_packets):
         for i in range(1, tot_packets + 1):
             send_time = time.time()
-            self.total_sent+=1
+            self.total_sent += 1
 
             message = f"Ping {i} {send_time}"
 

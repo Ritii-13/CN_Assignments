@@ -1,10 +1,12 @@
 import time
 from socket import *
 
+def calculateRTT(end_time, start_time):
+    return  end_time - start_time
 
-serverName = '127.0.0.1'  # (localhost)
+serverName = '127.0.0.1' 
 serverPort = 12000
-clientSocket = socket(AF_INET, SOCK_DGRAM)
+clientSocket = socket(family = AF_INET, type = SOCK_DGRAM, proto=0, fileno=None)
 clientSocket.settimeout(1)  
 
 RTTs = []
@@ -18,10 +20,10 @@ for i in range(1, tot_packets + 1):
     try:
         clientSocket.sendto(message.encode(), (serverName, serverPort))
         start_time = time.time()
-        response, serverAddress = clientSocket.recvfrom(1024)
+        response, serverAddress = clientSocket.recvfrom(4096)
         end_time = time.time()
 
-        rtt = end_time - start_time
+        rtt = calculateRTT(end_time, start_time)
         RTTs.append(rtt)
 
         print(f"Reply from {serverName}: {response.decode()}")
@@ -43,4 +45,5 @@ print(f"Packets: Sent = {tot_packets}, Received = {tot_packets - lost_packets}, 
 if RTTs:
     print(f"RTTs: Min = {min_rtt:.6f}s, Max = {max_rtt:.6f}s, Avg = {avg_rtt:.6f}s")
 
+clientSocket.shutdown(SHUT_RDWR)
 clientSocket.close()

@@ -1,0 +1,50 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World</title>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+    <p>Key Differences in the UDP Code:
+        No accept() Function:
+        
+        In UDP, you don't accept connections because UDP is connectionless. Instead, you just wait to receive a message using recvfrom().
+        No Connection Socket:
+        
+        Unlike TCP, there is no need for a separate connectionSocket for each client. With UDP, you just use the single serverSocket to receive and send data.
+        Use of recvfrom() and sendto():
+        
+        In UDP, you use recvfrom() to receive a datagram, and it gives you both the message and the client’s address.
+        You also use sendto() to send data back to the client, specifying the client’s address directly (since there's no connection being maintained).
+        No Closing of Connection:
+        
+        Since UDP is stateless and connectionless, there's no need to explicitly close a connection like you would with TCP's connectionSocket.close().
+        Performance Considerations:
+        TCP: Due to the reliable delivery and connection establishment, TCP is best suited for scenarios where all data must be received correctly and in order, such as web pages or file downloads.
+        UDP: Due to its lower overhead and faster communication, UDP is ideal for applications like video streaming, gaming, or DNS queries, where speed is critical, and some packet loss is acceptable.
+        To Summarize the Differences:
+        TCP: Requires establishing a connection with accept(), uses send() and recv(), ensures reliable data transfer, and requires closing the connection.
+        UDP: Does not establish a connection, uses recvfrom() and sendto(), is faster but unreliable, and does not require closing the connection.
+        When to Use Each:
+        Use TCP when you need reliability and ordering of data (e.g., web servers, file downloads).
+        Use UDP when speed is more important than reliability (e.g., real-time applications like video conferencing or games).
+      </p>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World</title>
+</head>
+<body>
+    <h1>We are smart!</h1>
+    <p>This world needs smart people like us</p>
+</body>
+</html>

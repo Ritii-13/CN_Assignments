@@ -1,11 +1,11 @@
 from socket import *
 import sys
 
-# Create a TCP server socket
+# Stream instead of datagram in TCP
 serverSocket = socket(AF_INET, SOCK_STREAM)
 
-# Bind the socket to server address and port
-serverPort = 6789  # You can change this to any available port
+
+serverPort = 6789  # can be changed
 serverSocket.bind(('', serverPort))
 serverSocket.listen(1)
 

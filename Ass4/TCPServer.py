@@ -22,10 +22,14 @@ while True:
         f = open(filename[1:])
         outputdata = f.read()
 
-        # Send HTTP response header and file content
+        # Use this part for part 1
         connectionSocket.send("HTTP/1.1 200 OK\r\n\r\n".encode())
         for i in range(0, len(outputdata)):
             connectionSocket.send(outputdata[i].encode())
+        
+        # For client in part 3 to work use this code (next 2 lines) and comment out above code
+        # response = "HTTP/1.1 200 OK\r\n\r\n" + outputdata
+        # connectionSocket.send(response.encode())
 
         connectionSocket.send("\r\n".encode())
         connectionSocket.close()

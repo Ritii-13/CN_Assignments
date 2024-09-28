@@ -1,69 +1,49 @@
 from socket import *
 import sys
 
-try:
-    serverSocket = socket(AF_INET, SOCK_STREAM)
-    
-    serverPort = 6789  
-    serverSocket.bind(('0.0.0.0', serverPort))
-    serverSocket.listen(1)
-    print(f"Server is running on port {serverPort}...")
+# Stream instead of datagram in TCP
+serverSocket = socket(AF_INET, SOCK_STREAM)
 
-except socket.error as e:
-    print(f"Socket error: {e}")
-    sys.exit()
+serverPort = 6789  
+serverSocket.bind(('0.0.0.0', serverPort))
+serverSocket.listen(1)
 
 
 while True:
     print('Ready to serve...')
 
+    connectionSocket, addr = serverSocket.accept()
+
     try:
-        connectionSocket, addr = serverSocket.accept()
-        print(f"Connection established with {addr}")
+        message = connectionSocket.recv(1024).decode()
 
-        try:
-            message = connectionSocket.recv(1024).decode()
-            if not message:
-                raise ValueError("No message received or connection closed by client.")
-
-            print(f"Message received")
-
-            filename = message.split()[1]
-            try:
-                with open(filename[1:], 'r') as f:
-                    outputdata = f.read()
-
-                # # for part 1
-                # connectionSocket.send("HTTP/1.1 200 OK\r\n\r\n".encode())
-                # for i in range(0, len(outputdata)):
-                #     connectionSocket.send(outputdata[i].encode())
-                
-                # For client in part 3 next 2 lines and comment out above code
-                response = "HTTP/1.1 200 OK\r\n\r\n" + outputdata
-                connectionSocket.send(response.encode())
-
-                connectionSocket.send("\r\n".encode())
-                print(f"File {filename[1:]} served successfully.")
-            
-            except FileNotFoundError:
-                print(f"File not found: {filename[1:]}")
-                connectionSocket.send("HTTP/1.1 404 Not Found\r\n\r\n".encode())
-                connectionSocket.send("<html><body><h1>404 Not Found</h1></body></html>\r\n".encode())
-
-        except ValueError as ve:
-            print(f"Error: {ve}")
-        
-        except Exception as e:
-            print(f"An error occurred while processing the request: {e}")
-
-        finally:
+        if not message:
             connectionSocket.close()
+            continue
 
-    except KeyboardInterrupt:
-        print("Server is shutting down...")
-        serverSocket.close()
-        sys.exit()
+        filename = message.split()[1]
+        f = open(filename[1:])
+        outputdata = f.read()
 
-    except Exception as e:
-        print(f"An error occurred in the connection handling: {e}")
+        # for part 1
+        # connectionSocket.send("HTTP/1.1 200 OK\r\n\r\n".encode())
+        # for i in range(0, len(outputdata)):
+        #     connectionSocket.send(outputdata[i].encode())
+        
+        # For client in part 3 next 2 lines and comment out above code
+        response = "HTTP/1.1 200 OK\r\n\r\n" + outputdata
+        connectionSocket.send(response.encode())
+
+        print(response)
+
+        connectionSocket.send("\r\n".encode())
+        f.close()
         connectionSocket.close()
+        
+    except IOError:
+        connectionSocket.send("HTTP/1.1 404 Not Found\r\n\r\n".encode())
+        connectionSocket.send("<html><body><h1>404 Not Found</h1></body></html>\r\n".encode())
+        connectionSocket.close()
+
+serverSocket.close()
+sys.exit()  

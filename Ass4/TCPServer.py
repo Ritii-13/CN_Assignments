@@ -5,7 +5,7 @@ import sys
 serverSocket = socket(AF_INET, SOCK_STREAM)
 
 serverPort = 6789  
-serverSocket.bind(('localhost', serverPort))
+serverSocket.bind(('0.0.0.0', serverPort))
 serverSocket.listen(1)
 
 
@@ -33,6 +33,8 @@ while True:
         # For client in part 3 next 2 lines and comment out above code
         response = "HTTP/1.1 200 OK\r\n\r\n" + outputdata
         connectionSocket.send(response.encode())
+
+        print(response)
 
         connectionSocket.send("\r\n".encode())
         f.close()

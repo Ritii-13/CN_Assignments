@@ -67,6 +67,6 @@ class WebServer:
         connectionSocket.close()
         print("Connection closed.\n")
 
-server = WebServer(host='localhost', port=6789)
+server = WebServer(host='0.0.0.0', port=6789)
 server.start()
 

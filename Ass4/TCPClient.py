@@ -9,8 +9,12 @@ class TCPClient:
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def connect(self):
-        self.client_socket.connect((self.host, self.port))
-        print(f"Connected to server at {self.host}:{self.port}")
+        try:
+            self.client_socket.connect((self.host, self.port))
+            print(f"Connected to server at {self.host}:{self.port}")
+        except socket.error as e:
+            print(f"Error connecting to server: {e}")
+            sys.exit(1)
 
     def create_request(self):
         request_line = f"GET /{self.filename} HTTP/1.1\r\n"
@@ -18,19 +22,35 @@ class TCPClient:
         return request_line + headers
 
     def send_request(self):
-        request = self.create_request()
-        self.client_socket.sendall(request.encode())
-        print("Sent request:")
-        print(request)
+        try:
+            request = self.create_request()
+            self.client_socket.sendall(request.encode())
+            print("Sent request:")
+            print(request)
+        except socket.error as e:
+            print(f"Error sending request: {e}")
+            sys.exit(1)
 
     def receive_response(self):
-        response = self.client_socket.recv(4096)
-        print("Received response:")
-        print(response.decode())
+        try:
+            response = self.client_socket.recv(4096)
+            if not response:
+                raise ValueError("No response received or server closed connection unexpectedly.")
+            print("Received response:")
+            print(response.decode())
+        except socket.error as e:
+            print(f"Error receiving response: {e}")
+        except ValueError as ve:
+            print(f"Error: {ve}")
+        except Exception as e:
+            print(f"Unexpected error while receiving response: {e}")
 
     def close(self):
-        self.client_socket.close()
-        print("Connection closed.")
+        try:
+            self.client_socket.close()
+            print("Connection closed.")
+        except socket.error as e:
+            print(f"Error closing the connection: {e}")
 
 def main():
     if len(sys.argv) != 4:

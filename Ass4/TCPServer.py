@@ -1,14 +1,12 @@
 from socket import *
 import sys
 
-# Stream instead of datagram in TCP
 serverSocket = socket(AF_INET, SOCK_STREAM)
 
 serverPort = 6789  
-serverSocket.bind(('0.0.0.0', serverPort))
+serverSocket.bind(('127.0.0.1', serverPort))
 serverSocket.listen(1)
 print('The server is ready to receive')
-
 
 while True:
     print('Ready to serve...')
@@ -22,36 +20,25 @@ while True:
             continue
 
         filename = message.split()[1]
-        f = open(filename[1:])
+        with open(filename[1:]) as f:
+            outputdata = f.read()
 
         print("Requested file: " + filename)
 
-        outputdata = f.read()
-
-        # for part 1
-        connectionSocket.send("HTTP/1.1 200 OK\r\n\r\n".encode())
-        for i in range(0, len(outputdata)):
-            connectionSocket.send(outputdata[i].encode())
-        
-        # # For client in part 3 next 2 lines and comment out above code
-        # response = "HTTP/1.1 200 OK\r\n\r\n" + outputdata
-        # connectionSocket.send(response.encode())
+        response = "HTTP/1.1 200 OK\r\n\r\n" + outputdata
+        connectionSocket.sendall(response.encode())
 
         print("Sent response to client")
 
-        # print(response)
-
-        connectionSocket.send("\r\n".encode())
-        f.close()
-        connectionSocket.close()
-
-        print("Connection closed.")
-        
     except IOError:
-        connectionSocket.send("HTTP/1.1 404 Not Found\r\n\r\n".encode())
-        connectionSocket.send("<html><body><h1>404 Not Found</h1></body></html>\r\n".encode())
+        # Send a 404 error message if the file is not found
+        error_response = "HTTP/1.1 404 Not Found\r\n\r\n<html><body><h1>404 Not Found</h1></body></html>"
+        connectionSocket.sendall(error_response.encode())
         print("File not found, sending 404 response.")
+
+    finally:
         connectionSocket.close()
+        print("Connection closed.")
 
 serverSocket.close()
-sys.exit()  
+sys.exit()

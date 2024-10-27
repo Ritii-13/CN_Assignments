@@ -1,8 +1,8 @@
 import time
 from socket import *
 
-class UDPPingerClient:
-    tot_packets = 100  
+class UDPHeartbeatClient:
+    tot_packets = 1000 
     missed_heartbeats = 0  
     consecutive_misses = 0  
     total_sent = 0
@@ -57,7 +57,7 @@ class UDPPingerClient:
 serverName = '127.0.0.1'
 serverPort = 12000
 
-client = UDPPingerClient(serverName, serverPort)
+client = UDPHeartbeatClient(serverName, serverPort)
 client.ping(client.tot_packets)
 client.print_stats()
 client.close()
